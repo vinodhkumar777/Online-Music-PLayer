@@ -20,7 +20,7 @@ let inactivity_time=0;
 function timeIncrement()
 {
     inactivity_time++;
-    if(inactivity_time>=2)
+    if(inactivity_time>=90)
     {
         pauseTrack();
         //alert("you are out of music player");
@@ -38,6 +38,7 @@ setInterval(timeIncrement,60000);
 document.addEventListener("onmousemove",resetTimer);
 document.addEventListener("onkeydown",resetTimer);
 document.addEventListener("onmousewheel",resetTimer);
+document.addEventListener("onkeypress",resetTimer);
 
 
 
