@@ -8,9 +8,11 @@ let prev_btn = document.querySelector(".prev-track");
 let next_btn = document.querySelector(".next-track");
 
 let seek_slider = document.querySelector(".seek-slider");
+let slider_container=document.querySelector(".slider-container")
 let volume_slider = document.querySelector(".volume-slider");
 let current_time = document.querySelector(".current-time");
 let total_duration = document.querySelector(".total_duration");
+let par=document.querySelector(".player");
 
 let volume_up=document.querySelector(".volume-up");
 
@@ -25,18 +27,18 @@ function timeIncrement()
     }
 }
 
+function resetTimer()
+{
+    inactivity_time=0;
+    //reset time to zero again
+}
+
 setInterval(timeIncrement,60000);
 
-document.onmousemove=function(event)
-{
-   inactivity_time=0;
-   //alert("You are Inactive in the browser for a long time!");
-};
+document.addEventListener("onmousemove",resetTimer);
+document.addEventListener("onkeydown",resetTimer);
+document.addEventListener("onmousewheel",resetTimer);
 
-document.onkeydown=function(event){
-    inactivity_time=0;
-   // alert("You are Inactive in the browser for a long time!");
-};
 
 
 let ismute=false;
@@ -47,7 +49,6 @@ let update_timer;
 //create an audio element
 
 let curr_track = document.createElement("audio");
-
 let track_list = [
       {
         name: "Natu Natu",
@@ -82,21 +83,21 @@ let track_list = [
 ];
 
 
-
+now_playing.style.fontSize= "30px";
+now_playing.style.textTransform="uppercase";
 function loadTrack(track_index){
     clearInterval("update_timer");
     resetValues();
 
     //load the track
-
+   
     curr_track.src = track_list[track_index].path;
     curr_track.load();
 
     track_art.style.backgroundImage = `url(${track_list[track_index].image})`;
     track_name.textContent = `${track_list[track_index].name}`;
     track_artist.textContent = `${track_list[track_index].artist}`;
-    now_playing.textContent = `PLAYING ${track_index+1} OF ${track_list.length}`;
-
+    now_playing.textContent = `playing ${track_list[track_index].name}`;
     update_timer = setInterval(seekUpdate , 1000);
     curr_track.addEventListener("ended" ,nextTrack);
 
@@ -215,11 +216,31 @@ function seekUpdate(){
     
 
 }
-
-seek_slider.onchange = function (){
+let display_time_stamp=document.createElement("p");
+par.insertBefore(display_time_stamp,par.children[2]);
+display_time_stamp.textContent="Hover to get timestamp";
+display_time_stamp.style.margin="0px";
+display_time_stamp.style.backgroundColor="red";
+display_time_stamp.style.fontSize="20px";
+display_time_stamp.style.fontWeight="bold";
+display_time_stamp.style.borderRadius="5px";
+seek_slider.onmousemove = function (e){
     let seek_position=0;
+    seek_position= Math.floor((e.offsetX / e.target.clientWidth) *  parseInt(e.target.getAttribute('max'),10));
+    console.log(seek_position);
+    let seek_time=((curr_track.duration)*(seek_position))/100;
+    let display_min=Math.floor(seek_time/60);
+    let display_sec=Math.floor(seek_time%60);
+    if (display_sec < 10) { display_sec = "0" + display_sec; }
+    if (display_min < 10) { display_min = "0" + display_min; }
+    console.log(display_min,display_sec);
+    display_time_stamp.textContent=`${display_min}:${display_sec}`;
     
+ }
+ seek_slider.onmouseout = function()
+ {
+    display_time_stamp.textContent="Hover to get timestamp";
  }
 
 loadTrack(track_index);
-playTrack();
+pauseTrack();
