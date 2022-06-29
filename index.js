@@ -14,6 +14,29 @@ let total_duration = document.querySelector(".total_duration");
 
 let volume_up=document.querySelector(".volume-up");
 
+let inactivity_time=0;
+function timeIncrement()
+{
+    inactivity_time++;
+    if(inactivity_time>=2)
+    {
+        pauseTrack();
+        //alert("you are out of music player");
+    }
+}
+
+setInterval(timeIncrement,60000);
+
+document.onmousemove=function(event)
+{
+   inactivity_time=0;
+   //alert("You are Inactive in the browser for a long time!");
+};
+
+document.onkeydown=function(event){
+    inactivity_time=0;
+   // alert("You are Inactive in the browser for a long time!");
+};
 
 
 let ismute=false;
@@ -28,19 +51,19 @@ let curr_track = document.createElement("audio");
 let track_list = [
       {
         name: "Natu Natu",
-        artist: "Rahul Spiligunj ,  Kala Bhairava",
+        artist: "Rahul Spiligunj ,  Kala Bhairava ,M.M.Keeravani ",
         image: "https://statushb.com/upload/post_thumbnail/natu_natu_poster.jpg",
         path: "./audio1.mp3",
       },
       {
         name: "Etthara Jenda",
-        artist: "MM Keeravani, Ram Charan, Jr NTR",
+        artist: "MM Keeravani, Ram Charan, Jr NTR, Vishal Mishra , Prudhvi Chandra",
         image: "https://alllyricszone.in/wp-content/uploads/2022/03/RRR-Ethara-Jenda-From-March-14-1646916366-1719.jpg",
         path: "./audio2.mp3",
       },
       {
         name: "Toofan",
-        artist: "SriKrishna, Pridhwi Chandar",
+        artist: "SriKrishna, Pridhwi Chandar ,Arun Kaundinya, Santosh Venky, Mohan Krishna",
         image: "https://pbs.twimg.com/media/FOWbkYmVUAAj4Go?format=jpg&name=900x900",
         path: "./audio3.mp3",
       },
@@ -48,13 +71,13 @@ let track_list = [
         name: "The Monster",
         artist: "RaviBasrur, AdithiSagar",
         image: "http://www.teluguone.com//teluguoneUserFiles/img/kgf-song-today.webp",
-        path: "./audio4.mp3",
+        path: "./audio5.mp3",
       },
       {
         name: "Sulthana",
-        artist: "Sontosh Venky, Mohan Krishna",
+        artist: "Sontosh Venky, Mohan Krishna, Arun Kaundinya, SriKrishna, Prudhvi Chandra",
         image:"https://c.saavncdn.com/556/Sulthana-From-Kgf-Chapter-2--Telugu-2022-20220413121011-500x500.jpg",
-        path: "./audio5.mp3",
+        path: "./audio4.mp3",
       }
 ];
 
@@ -123,6 +146,7 @@ volume_up.addEventListener("click" , ()=>{
 function playTrack(){
     //play the loaded track
     curr_track.play();
+    console.log("song is playing now");
     isplaying=true;
 
     //change the icon to play track
@@ -192,6 +216,10 @@ function seekUpdate(){
 
 }
 
+seek_slider.onchange = function (){
+    let seek_position=0;
+    
+ }
 
 loadTrack(track_index);
 playTrack();
